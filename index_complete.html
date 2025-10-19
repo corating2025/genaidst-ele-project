@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GenAI-DST for ELE</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif, 'Noto Sans SC', sans-serif;
+            background-color: #f8fafc;
+            background-image: radial-gradient(#e2e8f0 0.8px, transparent 0.8px);
+            background-size: 20px 20px;
+        }
+        .gradient-text {
+            background: linear-gradient(to right, #10b981, #06b6d4, #6366f1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .feature-card {
+            background: white;
+            border-radius: 1rem;
+            padding: 2rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border: 1px solid #e5e7eb;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        .feature-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        .accordion-item {
+            border: 1px solid #e2e8f0;
+            transition: all 0.3s ease;
+        }
+        .accordion-header {
+            cursor: pointer;
+            user-select: none;
+        }
+        .accordion-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+        .accordion-item.active .accordion-content {
+            max-height: 600px;
+            overflow-y: auto;
+        }
+    </style>
+</head>
+<body class="antialiased">
+    <!-- Header -->
+    <header class="bg-white/80 backdrop-blur-lg fixed top-0 left-0 right-0 z-50 shadow-sm">
+        <div class="container mx-auto px-6 py-4">
+            <div class="flex items-center justify-between">
+                <div class="text-xl font-bold text-gray-800">
+                    <span class="text-emerald-500">GenAI-DST</span> for ELE
+                </div>
+                <nav class="hidden md:flex space-x-8 text-gray-600 font-medium">
+                    <a href="#home" class="hover:text-emerald-500 transition-colors">Home</a>
+                    <a href="#hub" class="hover:text-emerald-500 transition-colors">Learning Hub</a>
+                    <a href="#research" class="hover:text-emerald-500 transition-colors">Join Research</a>
+                    <a href="#community" class="hover:text-emerald-500 transition-colors">Community</a>
+                    <a href="#contact" class="hover:text-emerald-500 transition-colors">Contact</a>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <main class="pt-20">
+        <!-- Hero Section -->
+        <section id="home" class="py-20 md:py-32">
+            <div class="container mx-auto px-6 text-center">
+                <h1 class="text-3xl md:text-5xl font-extrabold text-gray-900 leading-tight">
+                    Empowering <span class="gradient-text">English Language Education</span><br>
+                    through <span class="gradient-text">Generative AI-powered Digital Storytelling</span>
+                </h1>
+                <p class="mt-6 text-lg text-gray-600 max-w-3xl mx-auto">
+                    A research-practice collaborative project aimed at empowering primary and secondary students in Hong Kong and overseas.
+                </p>
+                <div class="mt-10 flex flex-col sm:flex-row gap-4 justify-center">
+                    <button onclick="scrollToSection('project-framework')" class="bg-indigo-500 text-white font-bold px-8 py-3 rounded-lg hover:bg-indigo-600 transition-transform transform hover:scale-105 shadow-lg">
+                        Project Framework
+                    </button>
+                    <button onclick="scrollToSection('hub')" class="bg-emerald-500 text-white font-bold px-8 py-3 rounded-lg hover:bg-emerald-600 transition-transform transform hover:scale-105 shadow-lg">
+                        Explore Learning Hub
+                    </button>
+                    <button onclick="scrollToSection('research')" class="bg-white text-gray-700 font-bold px-8 py-3 rounded-lg hover:bg-gray-100 transition-colors border border-gray-300 shadow-sm">
+                        Join Our Research
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Interactive Demo Section -->
+        <section id="demo" class="py-20 bg-white">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-16">
+                    <h2 class="text-3xl font-extrabold text-gray-900">Interactive Demo</h2>
+                    <p class="mt-4 text-lg text-gray-600">Experience our AI-powered storytelling tools</p>
+                </div>
+                
+                <div class="grid md:grid-cols-2 gap-8">
+                    <!-- Story Generator -->
+                    <div class="feature-card">
+                        <h3 class="text-xl font-bold text-gray-900 mb-4">AI Story Generator</h3>
+                        <div class="space-y-4">
+                            <input type="text" id="story-prompt" placeholder="Enter your story idea..." class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500">
+                            <button onclick="generateStory()" class="w-full bg-emerald-500 text-white py-3 rounded-lg hover:bg-emerald-600 transition-colors">
+                                Generate Story
+                            </button>
+                            <div id="story-output" class="p-4 bg-gray-50 rounded-lg min-h-[100px] hidden">
+                                <p class="text-gray-600">Your generated story will appear here...</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Interactive Quiz -->
+                    <div class="feature-card">
+                        <h3 class="text-xl font-bold text-gray-900 mb-4">Story Elements Quiz</h3>
+                        <div class="space-y-4">
+                            <div class="quiz-question">
+                                <p class="font-medium text-gray-800 mb-3">What is the main character in a story called?</p>
+                                <div class="space-y-2">
+                                    <button onclick="selectAnswer(this, false)" class="w-full text-left p-3 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">
+                                        Antagonist
+                                    </button>
+                                    <button onclick="selectAnswer(this, true)" class="w-full text-left p-3 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">
+                                        Protagonist
+                                    </button>
+                                    <button onclick="selectAnswer(this, false)" class="w-full text-left p-3 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">
+                                        Narrator
+                                    </button>
+                                </div>
+                            </div>
+                            <div id="quiz-feedback" class="hidden p-3 rounded-lg"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Project Framework Section -->
+        <section id="project-framework" class="py-20 bg-gray-50">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-16">
+                    <h2 class="text-3xl font-extrabold text-gray-900">Project Framework</h2>
+                    <p class="mt-4 text-lg text-gray-600">Our comprehensive approach to AI-powered education</p>
+                </div>
+                
+                <div class="space-y-4">
+                    <!-- Framework Item 1 -->
+                    <div class="accordion-item bg-white rounded-xl shadow-md overflow-hidden">
+                        <button onclick="toggleAccordion(this)" class="accordion-header w-full text-left p-6 flex justify-between items-center bg-gray-100 hover:bg-gray-200 transition duration-300">
+                            <h3 class="text-xl font-semibold text-gray-800">
+                                <i class="fas fa-brain mr-3 text-emerald-500"></i>
+                                AI & Digital Storytelling Integration
+                            </h3>
+                            <span class="text-2xl text-gray-600 transform transition-transform duration-300">&#9662;</span>
+                        </button>
+                        <div class="accordion-content">
+                            <div class="p-6">
+                                <p class="text-gray-600 mb-4">
+                                    Our framework integrates artificial intelligence with traditional storytelling methods to create engaging, personalized learning experiences.
+                                </p>
+                                <ul class="list-disc list-inside space-y-2 text-gray-600">
+                                    <li>AI-powered story generation and enhancement</li>
+                                    <li>Personalized learning pathways</li>
+                                    <li>Interactive narrative experiences</li>
+                                    <li>Real-time feedback and assessment</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Framework Item 2 -->
+                    <div class="accordion-item bg-white rounded-xl shadow-md overflow-hidden">
+                        <button onclick="toggleAccordion(this)" class="accordion-header w-full text-left p-6 flex justify-between items-center bg-gray-100 hover:bg-gray-200 transition duration-300">
+                            <h3 class="text-xl font-semibold text-gray-800">
+                                <i class="fas fa-users mr-3 text-cyan-500"></i>
+                                Collaborative Learning Environment
+                            </h3>
+                            <span class="text-2xl text-gray-600 transform transition-transform duration-300">&#9662;</span>
+                        </button>
+                        <div class="accordion-content">
+                            <div class="p-6">
+                                <p class="text-gray-600 mb-4">
+                                    Students work together in AI-enhanced collaborative spaces to create, share, and improve their digital stories.
+                                </p>
+                                <ul class="list-disc list-inside space-y-2 text-gray-600">
+                                    <li>Peer review and feedback systems</li>
+                                    <li>Collaborative story building</li>
+                                    <li>Cross-cultural exchange programs</li>
+                                    <li>Teacher-student mentorship</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Framework Item 3 -->
+                    <div class="accordion-item bg-white rounded-xl shadow-md overflow-hidden">
+                        <button onclick="toggleAccordion(this)" class="accordion-header w-full text-left p-6 flex justify-between items-center bg-gray-100 hover:bg-gray-200 transition duration-300">
+                            <h3 class="text-xl font-semibold text-gray-800">
+                                <i class="fas fa-chart-line mr-3 text-indigo-500"></i>
+                                Assessment & Analytics
+                            </h3>
+                            <span class="text-2xl text-gray-600 transform transition-transform duration-300">&#9662;</span>
+                        </button>
+                        <div class="accordion-content">
+                            <div class="p-6">
+                                <p class="text-gray-600 mb-4">
+                                    Advanced analytics provide insights into student progress and learning outcomes.
+                                </p>
+                                <ul class="list-disc list-inside space-y-2 text-gray-600">
+                                    <li>Real-time progress tracking</li>
+                                    <li>Competency-based assessment</li>
+                                    <li>Learning analytics dashboard</li>
+                                    <li>Personalized recommendations</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Learning Hub Section -->
+        <section id="hub" class="py-20 bg-white">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-16">
+                    <h2 class="text-3xl font-extrabold text-gray-900">Learning Hub</h2>
+                    <p class="mt-4 text-lg text-gray-600">Explore our comprehensive learning resources</p>
+                </div>
+                
+                <div class="grid md:grid-cols-3 gap-8">
+                    <div class="feature-card">
+                        <div class="text-center">
+                            <i class="fas fa-book-open text-4xl text-emerald-500 mb-4"></i>
+                            <h3 class="text-xl font-bold text-gray-900 mb-4">Story Templates</h3>
+                            <p class="text-gray-600 mb-6">Pre-designed templates to jumpstart your storytelling journey</p>
+                            <button onclick="showAlert('Story Templates')" class="bg-emerald-500 text-white px-6 py-2 rounded-lg hover:bg-emerald-600 transition-colors">
+                                Explore Templates
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="feature-card">
+                        <div class="text-center">
+                            <i class="fas fa-video text-4xl text-cyan-500 mb-4"></i>
+                            <h3 class="text-xl font-bold text-gray-900 mb-4">Video Tutorials</h3>
+                            <p class="text-gray-600 mb-6">Step-by-step guides for using AI storytelling tools</p>
+                            <button onclick="showAlert('Video Tutorials')" class="bg-cyan-500 text-white px-6 py-2 rounded-lg hover:bg-cyan-600 transition-colors">
+                                Watch Videos
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="feature-card">
+                        <div class="text-center">
+                            <i class="fas fa-puzzle-piece text-4xl text-indigo-500 mb-4"></i>
+                            <h3 class="text-xl font-bold text-gray-900 mb-4">Interactive Exercises</h3>
+                            <p class="text-gray-600 mb-6">Hands-on activities to practice storytelling skills</p>
+                            <button onclick="showAlert('Interactive Exercises')" class="bg-indigo-500 text-white px-6 py-2 rounded-lg hover:bg-indigo-600 transition-colors">
+                                Start Exercises
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Research Section -->
+        <section id="research" class="py-20 bg-gray-50">
+            <div class="container mx-auto px-6 text-center">
+                <h2 class="text-3xl font-extrabold text-gray-900 mb-8">Join Our Research</h2>
+                <p class="text-lg text-gray-600 max-w-3xl mx-auto mb-12">
+                    Be part of groundbreaking research in AI-powered education. Help us shape the future of digital storytelling in language learning.
+                </p>
+                <button onclick="showAlert('Research Program')" class="bg-indigo-500 text-white font-bold px-8 py-3 rounded-lg hover:bg-indigo-600 transition-transform transform hover:scale-105 shadow-lg">
+                    Learn More About Research
+                </button>
+            </div>
+        </section>
+
+        <!-- Community Section -->
+        <section id="community" class="py-20 bg-white">
+            <div class="container mx-auto px-6 text-center">
+                <h2 class="text-3xl font-extrabold text-gray-900 mb-8">Join Our Community</h2>
+                <p class="text-lg text-gray-600 max-w-3xl mx-auto mb-12">
+                    Connect with educators, researchers, and students from around the world who are passionate about AI-enhanced storytelling.
+                </p>
+                <div class="flex justify-center space-x-4">
+                    <button onclick="showAlert('Discord Community')" class="bg-purple-500 text-white px-6 py-3 rounded-lg hover:bg-purple-600 transition-colors">
+                        <i class="fab fa-discord mr-2"></i>Discord
+                    </button>
+                    <button onclick="showAlert('Twitter Community')" class="bg-blue-500 text-white px-6 py-3 rounded-lg hover:bg-blue-600 transition-colors">
+                        <i class="fab fa-twitter mr-2"></i>Twitter
+                    </button>
+                    <button onclick="showAlert('LinkedIn Community')" class="bg-blue-700 text-white px-6 py-3 rounded-lg hover:bg-blue-800 transition-colors">
+                        <i class="fab fa-linkedin mr-2"></i>LinkedIn
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact Section -->
+        <section id="contact" class="py-20 bg-gray-50">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-16">
+                    <h2 class="text-3xl font-extrabold text-gray-900">Contact Us</h2>
+                    <p class="mt-4 text-lg text-gray-600">Get in touch with our team</p>
+                </div>
+                
+                <div class="max-w-2xl mx-auto">
+                    <form onsubmit="handleContactForm(event)" class="space-y-6">
+                        <div class="grid md:grid-cols-2 gap-6">
+                            <input type="text" placeholder="Your Name" required class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500">
+                            <input type="email" placeholder="Your Email" required class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500">
+                        </div>
+                        <input type="text" placeholder="Subject" required class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500">
+                        <textarea placeholder="Your Message" rows="6" required class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"></textarea>
+                        <button type="submit" class="w-full bg-emerald-500 text-white py-3 rounded-lg hover:bg-emerald-600 transition-colors">
+                            Send Message
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-12">
+        <div class="container mx-auto px-6 text-center">
+            <div class="text-xl font-bold mb-4">
+                <span class="text-emerald-500">GenAI-DST</span> for ELE
+            </div>
+            <p class="text-gray-400 mb-8">Empowering English Language Education through AI-powered Digital Storytelling</p>
+            <div class="flex justify-center space-x-6">
+                <a href="#" class="text-gray-400 hover:text-white transition-colors">
+                    <i class="fab fa-twitter text-xl"></i>
+                </a>
+                <a href="#" class="text-gray-400 hover:text-white transition-colors">
+                    <i class="fab fa-linkedin text-xl"></i>
+                </a>
+                <a href="#" class="text-gray-400 hover:text-white transition-colors">
+                    <i class="fab fa-github text-xl"></i>
+                </a>
+            </div>
+            <div class="mt-8 pt-8 border-t border-gray-800 text-gray-400">
+                <p>&copy; 2024 GenAI-DST for ELE. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Smooth scrolling function
+        function scrollToSection(sectionId) {
+            const element = document.getElementById(sectionId);
+            if (element) {
+                element.scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+
+        // Accordion functionality
+        function toggleAccordion(button) {
+            const accordionItem = button.closest('.accordion-item');
+            const content = accordionItem.querySelector('.accordion-content');
+            const icon = button.querySelector('span');
+            
+            // Close all other accordions
+            document.querySelectorAll('.accordion-item').forEach(item => {
+                if (item !== accordionItem) {
+                    item.classList.remove('active');
+                    item.querySelector('.accordion-content').style.maxHeight = '0';
+                    item.querySelector('span').style.transform = 'rotate(0deg)';
+                }
+            });
+            
+            // Toggle current accordion
+            accordionItem.classList.toggle('active');
+            if (accordionItem.classList.contains('active')) {
+                content.style.maxHeight = content.scrollHeight + 'px';
+                icon.style.transform = 'rotate(180deg)';
+            } else {
+                content.style.maxHeight = '0';
+                icon.style.transform = 'rotate(0deg)';
+            }
+        }
+
+        // Story generator function
+        function generateStory() {
+            const prompt = document.getElementById('story-prompt').value;
+            const output = document.getElementById('story-output');
+            
+            if (!prompt.trim()) {
+                alert('Please enter a story idea first!');
+                return;
+            }
+            
+            output.classList.remove('hidden');
+            output.innerHTML = `
+                <div class="animate-pulse">
+                    <div class="h-4 bg-gray-300 rounded w-3/4 mb-2"></div>
+                    <div class="h-4 bg-gray-300 rounded w-1/2 mb-2"></div>
+                    <div class="h-4 bg-gray-300 rounded w-5/6"></div>
+                </div>
+            `;
+            
+            // Simulate AI generation
+            setTimeout(() => {
+                output.innerHTML = `
+                    <h4 class="font-bold text-gray-800 mb-2">Generated Story:</h4>
+                    <p class="text-gray-700">
+                        Once upon a time, in a world where ${prompt.toLowerCase()}, there lived a young adventurer named Alex. 
+                        Alex discovered that with the power of AI and creativity, any story could come to life. 
+                        Through digital storytelling, Alex learned to express ideas in ways never imagined before, 
+                        connecting with friends across the globe and sharing tales that inspired others to dream big.
+                    </p>
+                `;
+            }, 2000);
+        }
+
+        // Quiz functionality
+        function selectAnswer(button, isCorrect) {
+            const feedback = document.getElementById('quiz-feedback');
+            const buttons = button.parentElement.querySelectorAll('button');
+            
+            // Disable all buttons
+            buttons.forEach(btn => {
+                btn.disabled = true;
+                btn.classList.add('opacity-50');
+            });
+            
+            // Show feedback
+            feedback.classList.remove('hidden');
+            if (isCorrect) {
+                button.classList.add('bg-green-100', 'border-green-500');
+                feedback.className = 'p-3 rounded-lg bg-green-100 text-green-800 border border-green-500';
+                feedback.textContent = 'Correct! The protagonist is the main character in a story.';
+            } else {
+                button.classList.add('bg-red-100', 'border-red-500');
+                feedback.className = 'p-3 rounded-lg bg-red-100 text-red-800 border border-red-500';
+                feedback.textContent = 'Not quite right. The protagonist is the main character in a story.';
+            }
+        }
+
+        // Contact form handler
+        function handleContactForm(event) {
+            event.preventDefault();
+            alert('Thank you for your message! We will get back to you soon.');
+            event.target.reset();
+        }
+
+        // Generic alert function for demo purposes
+        function showAlert(feature) {
+            alert(`${feature} feature coming soon! This is a demo of our interactive website.`);
+        }
+
+        // Add smooth scrolling to navigation links
+        document.addEventListener('DOMContentLoaded', function() {
+            const navLinks = document.querySelectorAll('nav a[href^="#"]');
+            navLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const targetId = this.getAttribute('href').substring(1);
+                    scrollToSection(targetId);
+                });
+            });
+        });
+    </script>
+</body>
+</html>
